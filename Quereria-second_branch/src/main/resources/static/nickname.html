@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Квизтер</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;600&family=Rufina:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat Alternates', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        /* КОНТЕЙНЕР как на главной */
+        .main-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 100px;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px 100px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Rufina', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+        }
+
+        .left-block {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* БУРГЕР (как на главной) */
+        .burger {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .burger span {
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background: black;
+            border-radius: 2px;
+        }
+
+        .burger span:nth-child(1) { transform: translateY(-8px); }
+        .burger span:nth-child(2) { transform: translateY(0); }
+        .burger span:nth-child(3) { transform: translateY(8px); }
+
+        .burger:hover {
+            background: #700143;
+        }
+
+        .burger:hover span {
+            background: white;
+        }
+
+        /* ВЫПАДАЮЩЕЕ МЕНЮ (как на главной) */
+        .menu {
+            position: absolute;
+            left: 20%;
+            transform: translate(20px, -50%);
+            background: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            display: flex;
+            gap: 60px;
+
+            opacity: 0;
+            transform: translateX(-50px);
+            pointer-events: none;
+
+            transition: 0.4s ease;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.66);
+            z-index: 999;
+        }
+
+        .menu.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-item {
+            text-decoration: none;
+            color: black;
+            font-size: 22px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .menu-item::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 0%;
+            height: 4px;
+            background: #f2e46c;
+            transition: 0.4s;
+        }
+
+        .menu-item:hover::after,
+        .menu-item.active::after {
+            width: 100%;
+        }
+
+        /* PROFILE (как на главной) */
+        .profile-btn {
+            background: #e0e0e0;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .profile-btn:hover {
+            background: #700143;
+            color: white;
+        }
+
+        /* MAIN CONTENT */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 50px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Avatar upload */
+        .avatar-upload {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .avatar-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .avatar-circle:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-circle input {
+            display: none;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px 25px;
+            font-size: 22px;
+            border: 2px solid #d9d9d9;
+            border-radius: 60px;
+            outline: none;
+            font-family: 'Montserrat Alternates', sans-serif;
+            background: #f8f8f8;
+        }
+
+        .input-field::placeholder {
+            color: #aaa;
+            font-size: 22px;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 20px;
+            background: #d9d9d9;
+            border: none;
+            border-radius: 60px;
+            font-size: 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Montserrat Alternates', sans-serif;
+            color: #333;
+        }
+
+        .confirm-btn:hover {
+            background: #7a0042;
+            color: white;
+             transform: scale(1.02);
+        }
+
+        .confirm-btn:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+            .main-container {
+                padding: 0 20px;
+            }
+            .menu {
+                left: 20px;
+                right: 20px;
+                flex-direction: column;
+                gap: 20px;
+                border-radius: 30px;
+                top: 80px;
+                transform: translateX(-50px);
+            }
+            .menu.active {
+                transform: translateX(0);
+            }
+            .container {
+                margin: 20px auto;
+                padding: 30px;
+            }
+            .title {
+                font-size: 24px;
+            }
+            .input-field {
+                font-size: 18px;
+                padding: 14px 20px;
+            }
+            .input-field::placeholder {
+                font-size: 18px;
+            }
+            .confirm-btn {
+                font-size: 20px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="left-block">
+        <div class="logo">Q</div>
+        <div class="burger" id="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <nav class="menu" id="menu">
+        <a href="mainpage.html" class="menu-item" data-page="mainpage.html">Главная</a>
+        <a href="history.html" class="menu-item" data-page="history.html">История</a>
+        <a href="index.html" class="menu-item" data-page="creation.html">Создание</a>
+        <a href="help.html" class="menu-item" data-page="help.html">Помощь</a>
+    </nav>
+    <div class="profile-btn" id="profileBtn">Регистрация/вход</div>
+</div>
+
+<div class="main-container"></div>
+    <div class="container">
+        <!-- Блок загрузки фото -->
+        <div class="avatar-upload">
+            <div class="avatar-circle" id="avatarCircle">
+                <img src="img/photo.png" alt="avatar" class="avatar-icon" id="avatarIcon">
+                <input type="file" id="avatarInput" accept="image/*">
+            </div>
+        </div>
+
+        <div class="title">Введите никнейм</div>
+        <div class="input-group">
+            <input type="text" class="input-field" id="nickname" placeholder="ФИО" value="">
+        </div>
+
+        <button type="button" class="confirm-btn" id="confirmBtn">Подтвердить</button>
+    </div>
+</div>
+
+<script>
+    // === ЭЛЕМЕНТЫ ДЛЯ АВАТАРА ===
+    const avatarCircle = document.getElementById('avatarCircle');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarIcon = document.getElementById('avatarIcon');
+    const nicknameInput = document.getElementById('nickname');
+
+    // Функция для обновления отображения аватара
+    function updateAvatarDisplay(imageSrc) {
+        if (!avatarCircle) return;
+        
+        // Удаляем существующий img если есть
+        const existingImg = avatarCircle.querySelector('img:not(.avatar-icon)');
+        if (existingImg) {
+            existingImg.remove();
+        }
+        
+        // Показываем avatarIcon и устанавливаем src
+        avatarIcon.style.display = 'block';
+        avatarIcon.src = imageSrc;
+        avatarIcon.style.width = '100%';
+        avatarIcon.style.height = '100%';
+        avatarIcon.style.objectFit = 'cover';
+        avatarIcon.style.borderRadius = '50%';
+    }
+
+    // Загрузка фото
+    if (avatarCircle) {
+        avatarCircle.addEventListener('click', () => {
+            avatarInput.click();
+        });
+    }
+
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Проверка типа файла
+                if (!file.type.startsWith('image/')) {
+                    alert('Пожалуйста, выберите изображение');
+                    return;
+                }
+                
+                // Проверка размера (максимум 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Изображение не должно превышать 5MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const imageData = ev.target.result;
+                    updateAvatarDisplay(imageData);
+                    localStorage.setItem('avatar', imageData);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+    // Восстановление аватара из localStorage при загрузке страницы
+    const savedAvatar = localStorage.getItem('avatar');
+    if (savedAvatar) {
+        updateAvatarDisplay(savedAvatar);
+    }
+
+    (async function fillNicknameFromSession() {
+        try {
+            const response = await fetch('/api/auth/me', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                return;
+            }
+
+            const user = await response.json();
+
+            if (!nicknameInput.value.trim()) {
+                nicknameInput.value = user.name || '';
+            }
+        } catch (e) {
+            console.error('Не удалось подставить имя пользователя', e);
+        }
+    })();
+
+    function handleNicknameConfirm() {
+        try {
+            const nickname = nicknameInput.value.trim() || 'ФИО';
+            const selectedGroup = '';
+
+            const params = new URLSearchParams(window.location.search);
+            const quizId = params.get('quizId');
+
+            // Сохраняем аватар в localStorage для комнаты ожидания
+            const savedAvatarForWaiting = localStorage.getItem('avatar');
+            if (savedAvatarForWaiting) {
+                localStorage.setItem('participantAvatar', savedAvatarForWaiting);
+            }
+
+            if (!quizId) {
+                alert('Не найден id квиза');
+                return;
+            }
+
+            const rawPlayers = localStorage.getItem(`quizPlayers_${quizId}`);
+            let players = [];
+
+            if (rawPlayers) {
+                try {
+                    players = JSON.parse(rawPlayers) || [];
+                } catch (e) {
+                    players = [];
+                }
+            }
+
+            const exists = players.some(p => p.name === nickname && p.group === selectedGroup);
+
+            if (!exists) {
+                players.push({
+                    name: nickname,
+                    group: selectedGroup,
+                    avatar: savedAvatarForWaiting || null  // сохраняем аватар
+                });
+                localStorage.setItem(`quizPlayers_${quizId}`, JSON.stringify(players));
+            }
+
+            localStorage.setItem(`quizCurrentPlayer_${quizId}`, JSON.stringify({
+                name: nickname,
+                group: selectedGroup,
+                avatar: savedAvatarForWaiting || null  // сохраняем аватар текущего игрока
+            }));
+
+            window.location.assign(`waitingroom_participant.html?quizId=${quizId}`);
+        } catch (error) {
+            console.error('Ошибка при подтверждении никнейма:', error);
+            alert('Не удалось перейти в комнату ожидания');
+        }
+    }
+
+    // Удаляем дублирующиеся обработчики
+    const confirmBtn = document.getElementById('confirmBtn');
+    if (confirmBtn) {
+        // Очищаем предыдущие обработчики
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        
+        newConfirmBtn.addEventListener('click', handleNicknameConfirm);
+    }
+
+    nicknameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            handleNicknameConfirm();
+        }
+    });
+
+    // Кнопка профиля
+    const profileBtn = document.getElementById('profileBtn');
+    if (profileBtn) {
+        const newProfileBtn = profileBtn.cloneNode(true);
+        profileBtn.parentNode.replaceChild(newProfileBtn, profileBtn);
+        
+        newProfileBtn.addEventListener('click', function() {
+            window.location.href = 'registration.html';
+        });
+    }
+
+    const navLinks = document.querySelectorAll('.menu-item');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            navLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Подсветка активного пункта меню
+    function setActiveMenuItem() {
+        const currentPage = window.location.pathname.split("/").pop();
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const href = item.getAttribute('href');
+            if (href === currentPage) {
+                item.classList.add('active');
+            }
+        });
+    }
+    setActiveMenuItem();
+</script>
+<script type="module" src="js/header.js"></script>
+</body>
+</html>
